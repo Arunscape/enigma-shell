@@ -3,8 +3,8 @@ MV 2 $A
 ADD 2 $A
 MUL 2 $A
 DIV 2 $A
-
 JMP CHECK
+
 CHECK:
 SUB 1 $A
 JMPF $A == 3 QUICKMAFFS # make sure it is right

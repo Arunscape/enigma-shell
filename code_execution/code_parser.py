@@ -2,13 +2,24 @@ registers = {"out": []}
 labels = {}
 
 def main():
-    filename = ""
+    # filename = ""
     # filename = input("Enter your code file name here:\n")
-    if len(filename) == 0:
-        filename = "binarytest.eng"
-    else:
-        filename = filename + ".eng"
-    code_parse(filename)
+    # if len(filename) == 0:
+    #     filename = "binarytest.eng"
+    # else:
+    #     filename = filename + ".eng"
+    print("Basic Tests: ")
+    print("")
+    code_parse("basictest.eng")
+    print("")
+    print("")
+    print("--------------------------")
+    print("")
+    print("")
+    print("Binary Tests: ")
+    print("")
+    registers["out"] = []
+    code_parse("binarytest.eng")
 
 def extract_data(line, linenum):
     tokens = line.split()
@@ -261,7 +272,7 @@ def exec_and(v1, v2, lnm):
     registers[v2[1:]] = res
     return lnm
 
-def exec_nand(v1, v2, lnm):
+def exec_or(v1, v2, lnm):
     if v1[0] == "$":
         v1 = registers.get(v1[1:])
     if (v1[-1].lower() == "b"):
@@ -280,27 +291,35 @@ def exec_nand(v1, v2, lnm):
     else: 
         raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + lnm)
     val2 = int(val2[:-1], 2)
-    val2 = int(v1[:-1], 2) & val2
-    val2 = ~val2
+    val2 = int(v1[:-1], 2) | val2
     res = convert_to_binary(val2)
-    print(str(v1) + " NAND " + str(registers.get(v2[1:])) + " -> " + str(res) + "\n")
+    print(str(v1) + " OR " + str(registers.get(v2[1:])) + " -> " + str(res) + "\n")
     registers[v2[1:]] = res
     return lnm
 
-def exec_or(v1, v2, lnm):
-    print("TODO or " + str(v1) + " -> " + str(v2) + "\n")
-    return lnm
-
-def exec_nor(v1, v2, lnm):
-    print("TODO nor " + str(v1) + " -> " + str(v2) + "\n")
-    return lnm
-
 def exec_xor(v1, v2, lnm):
-    print("TODO xor " + str(v1) + " -> " + str(v2) + "\n")
-    return lnm
-
-def exec_nxor(v1, v2, lnm):
-    print("TODO nxor " + str(v1) + " -> " + str(v2) + "\n")
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    if (v1[-1].lower() == "b"):
+        try:
+            int(v1[:-1], 2)
+        except:
+            raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + lnm)
+    else: 
+        raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + lnm)
+    val2 = registers.get(v2[1:])
+    if (val2[-1].lower() == "b"):
+        try:
+            int(val2[:-1], 2)
+        except:
+            raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + lnm)
+    else: 
+        raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + lnm)
+    val2 = int(val2[:-1], 2)
+    val2 = int(v1[:-1], 2) ^ val2
+    res = convert_to_binary(val2)
+    print(str(v1) + " XOR " + str(registers.get(v2[1:])) + " -> " + str(res) + "\n")
+    registers[v2[1:]] = res
     return lnm
 
 def exec_jmp(lbl, lnm):
