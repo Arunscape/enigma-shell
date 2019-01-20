@@ -1,52 +1,30 @@
 language: node_js
-
 node_js:
-  - "node"
-
+- node
 services:
-  - docker
-
-#sudo: false
-#before_install:
-#  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-#  - export PATH=$HOME/.yarn/bin:$PATH
-#cache:
-#  yarn: true
-
-cache:
-  yarn
-  directories:
-    - $HOME/google-client-sdk
-
-env:
-  global:
-    # Do not prompt for user input when using any SDK methods.
-    - CLOUDSDK_CORE_DISABLE_PROMPTS=1 
-
+- docker
+cache: yarn
 install:
-  - yarn
-
+- yarn
+stages:
+- name: lint
+- name: test
+- name: push to dockerhub
+  if: branch = master
+- name: deploy to gcp
+  if: branch = master
 jobs:
   include:
-    - stage: lint
-      script: yarn lint
-    - stage: test 
-      script: yarn test
-      deploy:
-        provider: script
-        script:
-          - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; curl https://sdk.cloud.google.com | bash; fi
-          # Add gcloud to $PATH
-          - source /home/travis/google-cloud-sdk/path.bash.inc
-          - gcloud version
-          - gcloud --quiet components update kubectl
-          # Auth flow
-          - echo $GCLOUD_KEY | base64 --decode > gcloud.p12
-          - gcloud auth activate-service-account $GCLOUD_EMAIL --key-file gcloud.p12
-          - ssh-keygen -f ~/.ssh/google_compute_engine -N ""
-          # Push to Google container registry
-          - docker build -t gcr.io/$CLOUDSDK_CORE_PROJECT/$CLOUDSDK_CORE_PROJECT:v1 .
-          - gcloud docker push gcr.io/$CLOUDSDK_CORE_PROJECT/$CLOUDSDK_CORE_PROJECT:v1 > /dev/null
-          - gcloud container clusters get-credentials $CLOUDSDK_CORE_PROJECT
-      branch: master
-
+  - stage: lint
+    script: yarn lint
+  - stage: test
+    script: yarn test
+  - stage: push to dockerhub
+    script: "./push_dockerhub.sh"
+  - stage: deploy to gcp
+    script: "./deploy.sh"
+before_install:
+- openssl aes-256-cbc -K $encrypted_a61b52fb7c59_key -iv $encrypted_a61b52fb7c59_iv
+  -in deploy_key.enc -out ./deploy_key -d
+- openssl aes-256-cbc -K $encrypted_a61b52fb7c59_key -iv $encrypted_a61b52fb7c59_iv
+  -in deploy_key.enc -out deploy_key -d

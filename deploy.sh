@@ -1,28 +1,10 @@
-# install AWS SDK
-pip install --user awscli
-export PATH=$PATH:$HOME/.local/bin
-REPO_NAME=travisci-test
+SERVER_IP=35.233.140.84
+CONTAINER_NAME=klt-enigma-shell-mhxn
+DOCKER_REPO=arunscape/enigma-shell
 
-# install necessary dependency for ecs-deploy
-add-apt-repository ppa:eugenesan/ppa
-apt-get update
-apt-get install jq -y
-
-# install ecs-deploy
-curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | \
-  sudo tee -a /usr/bin/ecs-deploy
-sudo chmod +x /usr/bin/ecs-deploy
-
-# login AWS ECR
-#eval $(aws ecr get-login --region us-east-1)
-
-# or login DockerHub
-docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PSW
-
-# build the docker image and push to an image repository
-docker build -t $REPO_NAME .
-docker tag $REPO_NAME $DOCKER_HUB_USER/$REPO_NAME
-docker push $DOCKER_HUB_USER/$REPO_NAME
-
-# update an AWS ECS service with the new image
-ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_REPO_URL:latest
+#echo $PUBLIC_DEPLOY_KEY > $HOME/.ssh/known_hosts
+eval "$(ssh-agent -s)"
+chmod 600 ./deploy_key
+echo -e "Host $SERVER_IP\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+ssh-add ./deploy_key
+ssh -i ./deploy_key $USER_LOGIN@$SERVER_IP "docker stop $CONTAINER_NAME; docker pull $DOCKER_REPO; docker run -p 80:80 --rm $DOCKER_REPO"

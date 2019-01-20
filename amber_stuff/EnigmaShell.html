@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+
+<link href = "Enigma.css" type = "text/css" rel = "stylesheet">
+
+
+<head>
+<title>Enigma Shell</title>
+</head>
+
+
+<body><form >
+	<script type="text/JavaScript" src="Console.js"></script> <!--Calls the javaScript to run and write to the html page-->
+	<button id="navButton" onclick="toggleNavigation('sideBar')">Docs</button>
+	<div class="sidenav" id="sideBar" style="display: block;">Docs
+			<button class="collapsible" onclick="toggleNavigation('doc1')">Open Section 1</button>
+			<div class="content" id="doc1" style="display: none;">
+			  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+			</div>
+
+			<button class="collapsible" onclick="toggleNavigation('doc2')">Open Section 2</button>
+			<div class="content" id="doc2" style="display: none;">
+			  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
+
+			<button class="collapsible" onclick="toggleNavigation('doc3')">Open Section 3</button>
+			<div class="content" id="doc3" style="display: none;">
+			  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
+	  </div>
+	<div><textarea id = "consoleLog"
+		cols = "80"></textarea><button type="submit" id="submitButton">Submit</button></div>
+</form>
+</body>
+
+
+</html>
