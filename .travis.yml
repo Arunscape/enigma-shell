@@ -29,6 +29,8 @@ stages:
   - name: test
   - name: push to dockerhub
     if: branch = master
+  - name: deploy
+    if: branch = master
 
 jobs:
   include:
@@ -38,9 +40,5 @@ jobs:
       script: yarn test
     - stage: push to dockerhub
       script: ./push_dockerhub.sh
-      deploy:
-        provider: script
-        script: ./deploy.sh       
-      on:
-        branch: master
-
+    - stage: deploy
+      script: ./deploy
