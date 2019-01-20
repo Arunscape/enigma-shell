@@ -46,7 +46,6 @@ class App extends Component {
           />
           <Butt
             onClick={() => {
-              alert("HEY");
               axios
                 .post("http://35.233.140.84:80/", "MV 1 $A")
                 .then(res => console.log(res))
