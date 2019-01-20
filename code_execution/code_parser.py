@@ -1,4 +1,4 @@
-registers = {"out": None}
+registers = {"out": []}
 labels = {}
 
 def main():
@@ -77,10 +77,7 @@ def validate_RB(tokens, linenum):
     if len(tokens) != 3:
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Invalid command")
     if tokens[1][0] != "$" and tokens[1][-1].lower() != "b":
-        try:
-            inttest = int(tokens[1])
-        except:
-            raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or a binary string")
+        raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or a binary string")
     if tokens[2][0] != "$":
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Output must be a register")
 
@@ -111,51 +108,134 @@ def evaluate_code(lineTokens, maxLineNum):
                 command = command + instruction[1] + "', '" + instruction[2]
             if len(instruction) == 5:
                 command = command + instruction[2] + "', '" + instruction[1] + "', '" + instruction[3] + "', '" + instruction[4]
-            command = command + "')"
-            eval(command)
+            command = command + "', '" + str(lineNum) + "')"
+            lineNum = int(eval(command))
 
-def exec_mv(v1, v2):
-    print("TODO move " + v1 + " -> " + v2 + "\n")
+def exec_mv(v1, v2, lnm):
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    try:
+        v1 = int(v1)
+    except:
+        if v1[-1].lower() != "b":
+            raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    if v2 == "$out":
+        registers[v2[1:]].append(v1)
+    else:
+        registers[v2[1:]] = v1
+    print("move " + str(v1) + " -> " + str(v2) + "\n")
+    return lnm
 
-def exec_add(v1, v2):
-    print("TODO add " + v1 + " -> " + v2 + "\n")
+def exec_add(v1, v2, lnm):
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    try:
+        v1 = int(v1)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    val2 = registers.get(v2[1:])
+    try:
+        val2 = int(val2)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
+    result = v1 + val2
+    registers[v2[1:]] = result
+    print("add " + str(v1) + " + " + str(val2) + " = " + str(result) + " -> " + str(v2) + "\n")
+    return lnm
 
-def exec_sub(v1, v2):
-    print("TODO sub " + v1 + " -> " + v2 + "\n")
+def exec_sub(v1, v2, lnm):
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    try:
+        v1 = int(v1)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    val2 = registers.get(v2[1:])
+    try:
+        val2 = int(val2)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
+    result = -v1 + val2
+    registers[v2[1:]] = result
+    print("sub " + str(val2) + " - " + str(v1) + " = " + str(result) + " -> " + str(v2) + "\n")
+    return lnm
 
-def exec_mul(v1, v2):
-    print("TODO mul " + v1 + " -> " + v2 + "\n")
+def exec_mul(v1, v2, lnm):
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    try:
+        v1 = int(v1)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    val2 = registers.get(v2[1:])
+    try:
+        val2 = int(val2)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
+    result = v1 * val2
+    registers[v2[1:]] = result
+    print("mul " + str(v1) + " * " + str(val2) + " = " + str(result) + " -> " + str(v2) + "\n")
+    return lnm
 
-def exec_div(v1, v2):
-    print("TODO div " + v1 + " -> " + v2 + "\n")
+def exec_div(v1, v2, lnm):
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    try:
+        v1 = int(v1)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    val2 = registers.get(v2[1:])
+    try:
+        val2 = int(val2)
+    except:
+        raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
+    result = int(val2 / v1)
+    registers[v2[1:]] = result
+    print("div " + str(val2) + " / " + str(v1) + " = " + str(result) + " -> " + str(v2) + "\n")
+    return lnm
 
-def exec_and(v1, v2):
-    print("TODO and " + v1 + " -> " + v2 + "\n")
+def exec_and(v1, v2, lnm):
+    print("TODO and " + str(v1) + " -> " + str(v2) + "\n")
 
-def exec_nand(v1, v2):
-    print("TODO nand " + v1 + " -> " + v2 + "\n")
+def exec_nand(v1, v2, lnm):
+    print("TODO nand " + str(v1) + " -> " + str(v2) + "\n")
 
-def exec_or(v1, v2):
-    print("TODO or " + v1 + " -> " + v2 + "\n")
+def exec_or(v1, v2, lnm):
+    print("TODO or " + str(v1) + " -> " + str(v2) + "\n")
 
-def exec_nor(v1, v2):
-    print("TODO nor " + v1 + " -> " + v2 + "\n")
+def exec_nor(v1, v2, lnm):
+    print("TODO nor " + str(v1) + " -> " + str(v2) + "\n")
 
-def exec_xor(v1, v2):
-    print("TODO xor " + v1 + " -> " + v2 + "\n")
+def exec_xor(v1, v2, lnm):
+    print("TODO xor " + str(v1) + " -> " + str(v2) + "\n")
 
-def exec_nxor(v1, v2):
-    print("TODO nxor " + v1 + " -> " + v2 + "\n")
+def exec_nxor(v1, v2, lnm):
+    print("TODO nxor " + str(v1) + " -> " + str(v2) + "\n")
 
-def exec_jmp(lbl):
-    print("TODO jmp -> " + lbl + "\n")
+def exec_jmp(lbl, lnm):
+    dest = labels.get(lbl)
+    if dest == None:
+        raise RuntimeError("INVALID VALUE: " + str(lbl) + " at line " + str(lnm))
+    print("jump to " + str(lbl) + " -> from line " + str(lnm) + " to line " + str(dest) + "\n")
+    return dest-1
 
-def exec_jmpf(cmp, v1, v2, lbl):
-    print("TODO jmpf -> " + lbl + " IF " + v1 + " " + cmp + " " + v2 + "\n")
+def exec_jmpf(cmpr, v1, v2, lbl, lnm):
+    dest = labels.get(lbl)
+    if dest == None:
+        raise RuntimeError("INVALID VALUE: " + str(lbl) + " at line " + str(lnm))
+    print("jump to " + str(lbl) + " -> from line " + str(lnm) + " to line " + str(dest) + " IF " + str(v1) + " " + str(cmpr) + " " + str(v2) + "\n")
+    command = "exec_cmp('" + str(cmpr) + "', '" + str(v1) + "', '" + str(v2) + "')"
+    compareResult = int(eval(command))
+    if compareResult:
+        return dest-1
+    else:
+        return lnm
 
-def exec_cmp(cmp, v1, v2):
-    print("TODO compare " + v1 + " " + cmp + " " + v2 + "\n")
-    return 1
+def exec_cmp(cmpr, v1, v2):
+    command = "int(" + str(v1) + ") " + str(cmpr) + " int(" + str(v2) + ")"
+    result = eval(command)
+    print("TODO compare " + str(v1) + " " + str(cmpr) + " " + str(v2) + "\n")
+    return result
 
 def code_parse(filename):
     with open(filename) as f:
