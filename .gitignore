@@ -62,3 +62,6 @@ typings/
 
 # deploy key
 deploy_key
+
+#build directory
+build/
