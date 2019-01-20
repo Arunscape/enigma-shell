@@ -139,7 +139,10 @@ def exec_add(v1, v2, lnm):
     except:
         raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
     result = v1 + val2
-    registers[v2[1:]] = result
+    if v2 == "$out":
+        registers[v2[1:]].append(result)
+    else:
+        registers[v2[1:]] = result
     print("add " + str(v1) + " + " + str(val2) + " = " + str(result) + " -> " + str(v2) + "\n")
     return lnm
 
@@ -156,7 +159,10 @@ def exec_sub(v1, v2, lnm):
     except:
         raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
     result = -v1 + val2
-    registers[v2[1:]] = result
+    if v2 == "$out":
+        registers[v2[1:]].append(result)
+    else:
+        registers[v2[1:]] = result
     print("sub " + str(val2) + " - " + str(v1) + " = " + str(result) + " -> " + str(v2) + "\n")
     return lnm
 
@@ -173,7 +179,10 @@ def exec_mul(v1, v2, lnm):
     except:
         raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
     result = v1 * val2
-    registers[v2[1:]] = result
+    if v2 == "$out":
+        registers[v2[1:]].append(result)
+    else:
+        registers[v2[1:]] = result
     print("mul " + str(v1) + " * " + str(val2) + " = " + str(result) + " -> " + str(v2) + "\n")
     return lnm
 
@@ -190,7 +199,10 @@ def exec_div(v1, v2, lnm):
     except:
         raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + str(lnm))
     result = int(val2 / v1)
-    registers[v2[1:]] = result
+    if v2 == "$out":
+        registers[v2[1:]].append(result)
+    else:
+        registers[v2[1:]] = result
     print("div " + str(val2) + " / " + str(v1) + " = " + str(result) + " -> " + str(v2) + "\n")
     return lnm
 
@@ -223,8 +235,31 @@ def exec_jmpf(cmpr, v1, v2, lbl, lnm):
     dest = labels.get(lbl)
     if dest == None:
         raise RuntimeError("INVALID VALUE: " + str(lbl) + " at line " + str(lnm))
-    print("jump to " + str(lbl) + " -> from line " + str(lnm) + " to line " + str(dest) + " IF " + str(v1) + " " + str(cmpr) + " " + str(v2) + "\n")
-    command = "exec_cmp('" + str(cmpr) + "', '" + str(v1) + "', '" + str(v2) + "')"
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    try:
+        v1 = int(v1)
+    except:
+        if v1[-1].lower() == "b":
+            v1 = v1[:-1]
+            v1 = int(v1, 2)
+        else:
+            raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    val2 = None
+    if v2[0] == "$":
+        val2 = registers.get(v2[1:])
+    else:
+        val2 = v2
+    try:
+        val2 = int(val2)
+    except:
+        if val2[-1].lower() == "b":
+            val2 = val2[:-1]
+            val2 = int(val2, 2)
+        else:
+            raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    print("jump to " + str(lbl) + " -> from line " + str(lnm) + " to line " + str(dest) + " IF " + str(v1) + " " + str(cmpr) + " " + str(val2) + "\n")
+    command = "exec_cmp('" + str(cmpr) + "', '" + str(v1) + "', '" + str(val2) + "')"
     compareResult = int(eval(command))
     if compareResult:
         return dest-1
@@ -234,7 +269,7 @@ def exec_jmpf(cmpr, v1, v2, lbl, lnm):
 def exec_cmp(cmpr, v1, v2):
     command = "int(" + str(v1) + ") " + str(cmpr) + " int(" + str(v2) + ")"
     result = eval(command)
-    print("TODO compare " + str(v1) + " " + str(cmpr) + " " + str(v2) + "\n")
+    print("compare " + str(v1) + " " + str(cmpr) + " " + str(v2) + " -> " + str(result) + "\n")
     return result
 
 def code_parse(filename):
