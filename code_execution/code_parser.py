@@ -61,9 +61,6 @@ def validate_RIB(tokens, linenum):
             raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register, an integer, or a binary string")
     if tokens[2][0] != "$":
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Output must be a register")
-    # TODO Check to make sure that the referenced registers are valid for the question
-    command = "exec_" + tokens[0] + "('" + tokens[1] + "', '" + tokens[2] + "')"
-    eval(command)
 
 def validate_RI(tokens, linenum):
     if len(tokens) != 3:
@@ -75,23 +72,17 @@ def validate_RI(tokens, linenum):
             raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or an integer")
     if tokens[2][0] != "$":
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Output must be a register")
-    # TODO Check to make sure that the referenced registers are valid for the question
-    command = "exec_" + tokens[0] + "('" + tokens[1] + "', '" + tokens[2] + "')"
-    eval(command)
 
 def validate_RB(tokens, linenum):
     if len(tokens) != 3:
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Invalid command")
-    if tokens[1][0] != "$" and tokens[1][-1] != "b":
+    if tokens[1][0] != "$" and tokens[1][-1].lower() != "b":
         try:
             inttest = int(tokens[1])
         except:
             raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or a binary string")
     if tokens[2][0] != "$":
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Output must be a register")
-    # TODO Check to make sure that the referenced registers are valid for the question
-    command = "exec_" + tokens[0] + "('" + tokens[1] + "', '" + tokens[2] + "')"
-    eval(command)
 
 def validate_jmp(tokens, linenum):
     if len(tokens) != 2:
@@ -100,22 +91,28 @@ def validate_jmp(tokens, linenum):
         labels[tokens[1]]
     except:
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Jump destination " + tokens[1] + " not in " + str(labels))
-    command = "exec_jmp('" + tokens[1] + "')"
-    eval(command)
 
 def validate_jmpf(tokens, linenum):
     if len(tokens) != 5:
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Invalid command")
     if labels.get(tokens[4]) == None:
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Jump destination " + tokens[4] + " not in " + str(labels))
-    command = "exec_cmp" + "('" + tokens[2] + "', '" + tokens[1] + "', '" + tokens[3] + "')"
-    comparatorResponse = eval(command)
-    if comparatorResponse > 0:
-        command = "exec_jmp('" + tokens[4] + "')"
-        eval(command)
 
-def evaluate_code(line):
-    print("TODO remove all execution steps from the validate functions and put them here to allow for jumping")
+def evaluate_code(lineTokens, maxLineNum):
+    lineNum = 0
+    while (lineNum <= maxLineNum):
+        lineNum += 1
+        instruction = lineTokens.get(lineNum)
+        if instruction != None:
+            command = "exec_" + instruction[0] + "('"
+            if len(instruction) == 2:
+                command = command + instruction[1]
+            if len(instruction) == 3:
+                command = command + instruction[1] + "', '" + instruction[2]
+            if len(instruction) == 5:
+                command = command + instruction[2] + "', '" + instruction[1] + "', '" + instruction[3] + "', '" + instruction[4]
+            command = command + "')"
+            eval(command)
 
 def exec_mv(v1, v2):
     print("TODO move " + v1 + " -> " + v2 + "\n")
@@ -153,6 +150,9 @@ def exec_nxor(v1, v2):
 def exec_jmp(lbl):
     print("TODO jmp -> " + lbl + "\n")
 
+def exec_jmpf(cmp, v1, v2, lbl):
+    print("TODO jmpf -> " + lbl + " IF " + v1 + " " + cmp + " " + v2 + "\n")
+
 def exec_cmp(cmp, v1, v2):
     print("TODO compare " + v1 + " " + cmp + " " + v2 + "\n")
     return 1
@@ -162,27 +162,40 @@ def code_parse(filename):
         inputcode = f.readlines()
     inputcode = [x.strip() for x in inputcode]
 
+    print("")
+    print("<> EXTRACTING DATA <>")
+    print("")
     linenum = 0
-    lineTokens = []
+    lineTokens = {}
     for line in inputcode:
         linenum += 1
-        lineTokens.append(extract_data(line, str(linenum)))
-    lineTokens = list(filter(None, lineTokens))
+        lineTokenized = extract_data(line, linenum)
+        if len(lineTokenized) != 0:
+            lineTokens[linenum] = lineTokenized
+    maxLineNum = linenum
 
-    print("")
     print("Registers Used:")
     print(registers)
     print("Labels:")
     print(labels)
     print("")
 
+    print("<> VALIDATING CODE <>")
+    print("")
+    print(lineTokens)
     linenum = 0
-    for line in lineTokens:
+    for key, line in lineTokens.items():
         linenum += 1
         check_syntax(line, str(linenum))
+    print("")
+    print("<> CODE VALIDATED <>")
+    print("")
     
+    print("<> CODE EXECUTING <>")
+    print("")
     print(lineTokens)
-    evaluate_code(lineTokens)
-
+    print("")
+    evaluate_code(lineTokens, maxLineNum)
+    print("<> CODE EXECUTED SUCCESSFULLY <>")
 
 main()
