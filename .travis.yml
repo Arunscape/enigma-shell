@@ -7,10 +7,6 @@ cache: yarn
 install:
 - yarn
 stages:
-        #- name: lint
-        #- name: test
-        #- name: push to dockerhub
-        #if: branch = master
 - name: deploy to gcp
   if: branch = master
 jobs:
@@ -20,10 +16,11 @@ jobs:
   - stage: test
     script: yarn test
   - stage: push to dockerhub
-    script: 
     script: "./push_dockerhub.sh"
   - stage: deploy to gcp
     script: "./deploy.sh"
 before_install:
+- openssl aes-256-cbc -K $encrypted_a61b52fb7c59_key -iv $encrypted_a61b52fb7c59_iv
+  -in deploy_key.enc -out ./deploy_key -d
 - openssl aes-256-cbc -K $encrypted_a61b52fb7c59_key -iv $encrypted_a61b52fb7c59_iv
   -in deploy_key.enc -out deploy_key -d
