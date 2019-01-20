@@ -427,5 +427,6 @@ def code_parse(file):
     print("")
     print("<> OUTPUT VALUES <>")
     print(registers.get("out"))
+    return registers.get("out")
 
 # main()
