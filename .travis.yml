@@ -7,6 +7,10 @@ cache: yarn
 install:
 - yarn
 stages:
+- name: lint
+- name: test
+- name: push to dockerhub
+  if: branch = master
 - name: deploy to gcp
   if: branch = master
 jobs:
