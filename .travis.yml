@@ -20,6 +20,8 @@ jobs:
   - stage: test
     script: yarn test
   - stage: push to dockerhub
+    script: 
+      - set -x
     script: "./push_dockerhub.sh"
   - stage: deploy to gcp
     script: "./deploy"
