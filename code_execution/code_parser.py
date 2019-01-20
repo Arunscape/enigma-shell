@@ -5,12 +5,17 @@ def main():
     filename = ""
     # filename = input("Enter your code file name here:\n")
     if len(filename) == 0:
-        filename = "codetest.eng"
+        filename = "binarytest.eng"
+    else:
+        filename = filename + ".eng"
     code_parse(filename)
 
 def extract_data(line, linenum):
     tokens = line.split()
     tokens = [x.strip().lower() for x in tokens]
+
+    if len(tokens) == 0:
+        return ""
 
     # IGNORE COMMENTS
     if tokens[0][0] == "#":
@@ -23,7 +28,7 @@ def extract_data(line, linenum):
             tokens = tokens[0:tokenNumber-1]
             break
 
-    # EXTRACT REGISTERS AND JUMP DESTINATIONS
+    # EXTRACT REGISTERS, JUMP DESTINATIONS AND NOPS
     for token in tokens:
         if token[0] == "$":
             if registers.get(token[1:]) == None:
@@ -41,7 +46,7 @@ def check_syntax(tokens, linenum):
     # CHECK THE SYNTAX FOR THE FUNCTION
     cmd = tokens[0]
     if cmd == "mv":
-        validate_RIB(tokens, linenum)
+        validate_mv(tokens, linenum)
     if cmd == "add" or cmd == "sub" or cmd == "mul" or cmd == "div":
         validate_RI(tokens, linenum)
     if cmd == "and" or cmd == "or" or cmd == "xor" or cmd == "nand" or cmd == "nor" or cmd == "nxor":
@@ -51,14 +56,20 @@ def check_syntax(tokens, linenum):
     if cmd == "jmpf":
         validate_jmpf(tokens, linenum)
     
-def validate_RIB(tokens, linenum):
+def validate_mv(tokens, linenum):
     if len(tokens) != 3:
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Invalid command")
-    if tokens[1][0] != "$" and tokens[1][-1] != "b":
-        try:
-            inttest = int(tokens[1])
-        except:
-            raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register, an integer, or a binary string")
+    if tokens[1][0] != "$":
+        if tokens[1][-1].lower() == "b":
+            try: 
+                int(tokens[1][:-1], 2)
+            except:
+                raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register, an integer, or a binary string")
+        else:
+            try:
+                int(tokens[1])
+            except:
+                raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register, an integer, or a binary string")
     if tokens[2][0] != "$":
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Output must be a register")
 
@@ -67,7 +78,7 @@ def validate_RI(tokens, linenum):
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Invalid command")
     if tokens[1][0] != "$":
         try:
-            inttest = int(tokens[1])
+            int(tokens[1])
         except:
             raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or an integer")
     if tokens[2][0] != "$":
@@ -76,8 +87,14 @@ def validate_RI(tokens, linenum):
 def validate_RB(tokens, linenum):
     if len(tokens) != 3:
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Invalid command")
-    if tokens[1][0] != "$" and tokens[1][-1].lower() != "b":
-        raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or a binary string")
+    if tokens[1][0] != "$":
+        if tokens[1][-1].lower() == "b":
+            try:
+                int(tokens[1][:-1], 2)
+            except:
+                raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or a binary string")
+        else:
+            raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Input must be a register or a binary string")
     if tokens[2][0] != "$":
         raise ValueError("INVALID SYNTAX ON LINE " + linenum + ": Output must be a register")
 
@@ -114,11 +131,17 @@ def evaluate_code(lineTokens, maxLineNum):
 def exec_mv(v1, v2, lnm):
     if v1[0] == "$":
         v1 = registers.get(v1[1:])
-    try:
-        v1 = int(v1)
-    except:
-        if v1[-1].lower() != "b":
-            raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+    if v1 != "ERR" and v2.lower() != "$out":
+        try:
+            v1 = int(v1)
+        except:
+            if v1[-1].lower() != "b":
+                raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
+            else:
+                try:
+                    int(v1[:-1], 2)
+                except:
+                    raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + str(lnm))
     if v2 == "$out":
         registers[v2[1:]].append(v1)
     else:
@@ -206,23 +229,53 @@ def exec_div(v1, v2, lnm):
     print("div " + str(val2) + " / " + str(v1) + " = " + str(result) + " -> " + str(v2) + "\n")
     return lnm
 
+def convert_to_binary(number):
+    return str(bin(number)[2:]) + "b"
+
 def exec_and(v1, v2, lnm):
-    print("TODO and " + str(v1) + " -> " + str(v2) + "\n")
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    if (v1[-1].lower() == "b"):
+        try:
+            int(v1[:-1], 2)
+        except:
+            raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + lnm)
+    else: 
+        raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + lnm)
+    val2 = registers.get(v2[1:])
+    if (val2[-1].lower() == "b"):
+        try:
+            int(val2[:-1], 2)
+        except:
+            raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + lnm)
+    else: 
+        raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + lnm)
+    val2 = int(val2[:-1], 2)
+    val2 = int(v1[:-1], 2) & val2
+    res = convert_to_binary(val2)
+    registers[v2[1:]] = res
+    print(str(v1) + " AND " + str(registers.get(v2[1:])) + " -> " + str(res) + "\n")
+    return lnm
 
 def exec_nand(v1, v2, lnm):
     print("TODO nand " + str(v1) + " -> " + str(v2) + "\n")
+    return lnm
 
 def exec_or(v1, v2, lnm):
     print("TODO or " + str(v1) + " -> " + str(v2) + "\n")
+    return lnm
 
 def exec_nor(v1, v2, lnm):
     print("TODO nor " + str(v1) + " -> " + str(v2) + "\n")
+    return lnm
 
 def exec_xor(v1, v2, lnm):
     print("TODO xor " + str(v1) + " -> " + str(v2) + "\n")
+    return lnm
 
 def exec_nxor(v1, v2, lnm):
     print("TODO nxor " + str(v1) + " -> " + str(v2) + "\n")
+    return lnm
 
 def exec_jmp(lbl, lnm):
     dest = labels.get(lbl)
@@ -308,9 +361,10 @@ def code_parse(filename):
     
     print("<> CODE EXECUTING <>")
     print("")
-    print(lineTokens)
-    print("")
     evaluate_code(lineTokens, maxLineNum)
     print("<> CODE EXECUTED SUCCESSFULLY <>")
+    print("")
+    print("<> OUTPUT VALUES <>")
+    print(registers.get("out"))
 
 main()

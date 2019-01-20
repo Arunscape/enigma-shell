@@ -1,0 +1,31 @@
+#testing some binary
+MV 11001010b $A
+MV 00111010B $b 
+
+and $A $b
+MV $B $OUT
+MV 00111010b $B 
+
+OR $A $B
+mV $b $out 
+MV 00111010b $B 
+
+XOR $A $b
+mv $b $OUT
+mv 00111010b $b
+
+NAND $A $b
+mv $b $out
+mv 00111010b $b 
+
+NOR $A $B 
+MV $B $OUT 
+MV 00111010B $B 
+
+NXOR $A $B 
+MV $B $OUT 
+
+jmp end
+
+fail: mv -1 $out
+end:
