@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+
+<link href = "Enigma.css" type = "text/css" rel = "stylesheet">
+
+
+<head>
+<title>Enigma Shell</title>
+</head>
+
+
+<body><form>
+	<script type="text/JavaScript" src="Console.js"></script> <!--Calls the javaScript to run and write to the html page-->
+	<button id="navButton" onclick="toggleNavigation('sideNav')">Docs</button>
+	<div class="sidenav">Docs
+		<a href="#about">Logic</a><div >hi</div>
+		<a href="#services">Services</a>
+		<a href="#clients">Clients</a>
+		<a href="#contact">Contact</a>
+	  </div>
+	<h2 class="writing" id="pelletCount">Security Feed: 00:00</h2> <!--Keeps "score" of game-->
+	<div><textarea id = "consoleLog"
+		cols = "80"></textarea><button type="submit" id="submitButton">Submit</button></div>
+</form>
+</body>
+
+
+</html>
