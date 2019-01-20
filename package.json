@@ -17,5 +17,11 @@
     "grunt-processhtml": "^0.4.1",
     "grunt-replace": "^1.0.1",
     "prettier": "^1.15.3"
+  },
+  "scripts":{
+     "start": "echo noop",
+     "lint": "echo noop",
+     "test": "echo noop",
+     "build": "grunt"
   }
 }
