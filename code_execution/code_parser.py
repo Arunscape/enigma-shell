@@ -49,7 +49,7 @@ def check_syntax(tokens, linenum):
         validate_mv(tokens, linenum)
     if cmd == "add" or cmd == "sub" or cmd == "mul" or cmd == "div":
         validate_RI(tokens, linenum)
-    if cmd == "and" or cmd == "or" or cmd == "xor" or cmd == "nand" or cmd == "nor" or cmd == "nxor":
+    if cmd == "and" or cmd == "or" or cmd == "xor":
         validate_RB(tokens, linenum)
     if cmd == "jmp":
         validate_jmp(tokens, linenum)
@@ -230,7 +230,11 @@ def exec_div(v1, v2, lnm):
     return lnm
 
 def convert_to_binary(number):
-    return str(bin(number)[2:]) + "b"
+    val = str(bin(number)[2:])
+    if val[0] == "b":
+        return val[1:] + "b"
+    else:
+        return val + "b"
 
 def exec_and(v1, v2, lnm):
     if v1[0] == "$":
@@ -253,12 +257,34 @@ def exec_and(v1, v2, lnm):
     val2 = int(val2[:-1], 2)
     val2 = int(v1[:-1], 2) & val2
     res = convert_to_binary(val2)
-    registers[v2[1:]] = res
     print(str(v1) + " AND " + str(registers.get(v2[1:])) + " -> " + str(res) + "\n")
+    registers[v2[1:]] = res
     return lnm
 
 def exec_nand(v1, v2, lnm):
-    print("TODO nand " + str(v1) + " -> " + str(v2) + "\n")
+    if v1[0] == "$":
+        v1 = registers.get(v1[1:])
+    if (v1[-1].lower() == "b"):
+        try:
+            int(v1[:-1], 2)
+        except:
+            raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + lnm)
+    else: 
+        raise RuntimeError("INVALID VALUE: " + str(v1) + " at line " + lnm)
+    val2 = registers.get(v2[1:])
+    if (val2[-1].lower() == "b"):
+        try:
+            int(val2[:-1], 2)
+        except:
+            raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + lnm)
+    else: 
+        raise RuntimeError("INVALID VALUE: " + str(v2) + " at line " + lnm)
+    val2 = int(val2[:-1], 2)
+    val2 = int(v1[:-1], 2) & val2
+    val2 = ~val2
+    res = convert_to_binary(val2)
+    print(str(v1) + " NAND " + str(registers.get(v2[1:])) + " -> " + str(res) + "\n")
+    registers[v2[1:]] = res
     return lnm
 
 def exec_or(v1, v2, lnm):

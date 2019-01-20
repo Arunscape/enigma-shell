@@ -3,27 +3,19 @@ MV 11001010b $A
 MV 00111010B $b 
 
 and $A $b
+jmpf $b != 1010b fail
 MV $B $OUT
 MV 00111010b $B 
 
 OR $A $B
+jmpf $b != 11111010b fail
 mV $b $out 
 MV 00111010b $B 
 
 XOR $A $b
+jmpf $b != 11110000b fail
 mv $b $OUT
 mv 00111010b $b
-
-NAND $A $b
-mv $b $out
-mv 00111010b $b 
-
-NOR $A $B 
-MV $B $OUT 
-MV 00111010B $B 
-
-NXOR $A $B 
-MV $B $OUT 
 
 jmp end
 
