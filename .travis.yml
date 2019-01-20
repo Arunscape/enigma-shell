@@ -23,7 +23,7 @@ jobs:
     script: 
     script: "./push_dockerhub.sh"
   - stage: deploy to gcp
-    script: "./deploy"
+    script: "./deploy.sh"
 before_install:
 - openssl aes-256-cbc -K $encrypted_a61b52fb7c59_key -iv $encrypted_a61b52fb7c59_iv
   -in deploy_key.enc -out deploy_key -d
