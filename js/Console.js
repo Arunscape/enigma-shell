@@ -1,8 +1,7 @@
 function toggleNavigation(id) {
-        document.getElementById(id).hidden = !document.getElementById(id).hidden;
-  }
-
-function getTime() {
-    var time = new Date();
-    console.log(time);
-}
+    var x = document.getElementById(id);
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }  }
