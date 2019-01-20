@@ -1,0 +1,98 @@
+/*
+Created for a game where the user uses the arrow keys to direct pie-man arount the browser window to collect pellets.
+Tested on Internet Explorer, Acer Laptop
+Last Modified November 1, 2017*/
+
+html {
+    background-color: dimgrey;
+}
+.sidenav {
+    height: 100%;
+    width: 20vw;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+h2 {position: fixed;}
+#consoleLog {
+    position: absolute; 
+    width: 70vw;
+    height: 50vh;
+    left: 2px;
+    bottom: 2px;
+    background-color: black;
+    font-family: 'Courier New';
+    color: green;
+    font-size: 20px;
+}
+#submitButton {
+    position: absolute; 
+    right: 29.5vw;
+    bottom: 2px;
+    background-color: black;
+    font-family: 'Courier New';
+    color: green;
+    font-size: 20px;
+}
+
+#navButton {
+    position: absolute; 
+    right: 20vw;
+    top: 2px;
+    background-color: black;
+    font-family: 'Courier New';
+    color: gray;
+    font-size: 20px;
+}
+h3 {position: fixed; left: 25%; top: 90%}
+
+#sideBar {
+    font-size: 30px;
+    font-family: 'Courier New';
+    color: white;
+    position: center;
+}
+
+.collapsible {
+    background-color: #777;
+    font-family: 'Courier New';
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+  }
+  
+  .active, .collapsible:hover {
+    background-color: #555;
+  }
+  
+  .content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    font-family: 'Courier New';
+    font-size: 10px;
+    color: black;
+    background-color: #f1f1f1;
+  }
