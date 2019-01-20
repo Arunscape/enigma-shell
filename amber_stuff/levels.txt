@@ -1,0 +1,445 @@
+
+
+Node 1; Tutorial; Security Camera:
+
+	1 Static Output Register: $OUT = 1
+	1 Static Input Register: $IN = 1
+	2 Dynamic Registers: A, B
+	
+	TASK: Add the line "MV $A $OUT"
+	NOTES: Make only line 3 of 3 mutable
+	Given Instructions: 
+	Access the secuirty camera
+	Enter "MV $A $OUT"
+						
+	Given Code: 
+	MV $IN $A
+	[Mutable space to input "MV $A $OUT"]
+	
+	Result:
+	The level display screen brings up the first level, Smart Home (dark)
+
+
+Level 1: Smart Home
+	
+	
+Node 2; ADD Tutorial; Light Switch:
+
+	1 Static Output Register: $OUT = 5
+	1 Static Input Register: $IN = 2
+	2 Dynamic Registers: A, B
+	
+	TASK: Add the line "ADD 3 $A"
+	NOTES: Make only line 2 of 3 mutable
+	Given Instructions: 
+	Turn the lights on
+	Add 3 to register A
+						
+	Given Code: 
+	MV $IN $A
+	[Mutable space to input "ADD 3 $A"]
+	MV $A $OUT
+		
+	Result:
+	Change background to Smart Home (light)
+	
+	
+Node 3; MUL Tutorial; Smart Kettle:
+
+	1 Static Output Register: $OUT = 2
+	1 Static Input Register: $IN = 10
+	2 Dynamic Registers: A, B
+	
+	TASK: Add the line "MV $B $IN"
+	NOTES: Make only line 1 of 3 mutable
+	Given Instructions: 
+	Boil the kettle
+	Move the input to register B
+						
+	Given Code: 
+	[Mutable space to input "MV $B $IN"]
+	MUL 5 $B
+	MV $B $OUT
+		
+	Result:
+	Kettle turns on, steam emerges 
+		
+		
+Node 4; DIV Tutorial; Printer:
+
+	1 Static Output Register: $OUT = 5
+	1 Static Input Register: $IN = 29
+	2 Dynamic Registers: A, B
+	
+	TASK: Add the line "DIV 5 $A"
+	NOTES: Make only line 2 of 3 mutable
+	Given Instructions: 
+	Print a book 
+	Divide to get 5
+						
+	Given Code: 
+	MV $IN $A
+	[Mutable space to input "DIV 5 $A"]
+	MV $A $OUT
+		
+	Result:
+	Rest of the Nodes appear
+	
+	
+Node 5; Multiple Registers; Phone:
+
+	1 Static Output Register: $OUT = 11
+	2 Static Input Register: $IN1 = 5, $IN2 = 6
+	2 Dynamic Registers: A, B
+	
+	TASK: Add the line "ADD $A $B"
+	NOTES: Make only line 3 of 4 mutable
+	Given Instructions: 
+	Make a Call
+	Output 11
+						
+	Given Code: 
+	MV $IN1 $A
+	MV $IN2 $B
+	[Mutable space for input]
+	MV $A $OUT
+		
+	Result:
+	Guard answers phone 
+	
+	
+Node 6; Multiple Outputs; Door:
+
+	2 Static Output Register: $OUT1 = 13, $OUT2 = 4
+	1 Static Input Register: $IN = 5
+	2 Dynamic Registers: A, B
+	
+	TASK: Make user use mulitple outputs
+	NOTES: All lines provided with errors, user debugs
+	Given Instructions: 
+	Let him in
+	Output 13 and 4
+						
+	Given Code: 
+	MV $IN $A
+	MV $IN $B
+	ADD 8 $A
+	ADD 1 $A
+	MV $A $OUT1
+	MV $B $OUT2
+		
+	Result:
+	Door opens 
+	
+Node 7; Actual Puzzle; TV:
+
+	1 Static Output Register: $OUT = 15
+	1 Static Input Register: $IN = 3
+	2 Dynamic Registers: A, B
+	
+	TASK: Make user outputs the input times 5
+	NOTES: Make lines 3 and 4 of 6 mutable
+		   After the given numbers run, repeat with random to make sure code works as intened
+		   Make clear if the user fails that the solution was correct, but not general
+	Given Instructions: 
+	See whats on
+	Find the pattern:
+	5	25
+	7	35
+	12  60
+	
+	Given Code: 
+	MV $IN $A
+	[Mutable space for input]
+	MV $A $OUT
+		
+	Result:
+	TV turns on 	
+	
+	
+Node 8; Actual Puzzle; Door:
+
+	1 Static Output Register: $OUT = 9
+	2 Static Input Register: $IN1 = 7, $IN2 = 2
+	2 Dynamic Registers: A, B
+	
+	TASK: Make user output the 2 inputs added together
+	NOTES: All lines mutable
+		   After the given numbers run, repeat with random to make sure code works as intened
+		   Make clear if the user fails that the solution was correct, but not general
+	Given Instructions: 
+	Let him in
+	Find the pattern
+	2,3		5
+	5,9		14
+	1,1		2
+						
+	Given Code: 
+	[Mutable space]
+		
+	Result:
+	Door opens 	
+	
+	
+Node 9; Actual Puzzle; Computer:
+
+	1 Static Output Register: $OUT = 27
+	1 Static Input Register: $IN = 3
+	2 Dynamic Registers: A, B
+	
+	TASK: Make user output the 2 inputs added together
+	NOTES: Make the whole thing mutable, lines 1 and 3 given
+		   After the given numbers run, repeat with random to make sure code works as intened
+		   Make clear if the user fails that the solution was correct, but not general
+	Given Instructions: 
+	Unlock the computer
+	Find the pattern
+	2	8
+	4	64
+	6	216
+	
+	Given Code: 
+	MV $IN $A
+	[Any number of lines here]
+	MV $A $OUT
+	
+	Result:
+	Computer turns on		
+		
+	
+Level 2: Office building
+
+Node 10; Bitwise OR; Sprinkler system:
+	
+	1 Static Output Register: $OUT = 1111b
+	1 Static Input Register: $IN = 1010b
+	2 Dynamic Registers: A, B
+	
+	TASK: Set all bits
+	NOTES: Make only the mask on line 2 mutable
+		   After the given numbers run, repeat with random to make sure code works as intened
+		   Make clear if the user fails that the solution was correct, but not general
+	Given Instructions:
+	Make it Rain
+	Output all ones
+	
+	Given Code:
+	MV $IN $A
+	OR $A [Mutable]
+	MV $A $OUT
+	
+	Result
+	Turn on sprinkler
+	
+	
+Node 11; Bitwise AND; Fan:
+	
+	1 Static Output Register: $OUT = 1001b
+	1 Static Input Register: $IN = 1010b
+	2 Dynamic Registers: A, B
+	
+	TASK: Set first and last bit
+	NOTES: Make only the mask on line 2 mutable
+		   After the given numbers run, repeat with random to make sure code works as intened
+		   Make clear if the user fails that the solution was correct, but not general
+	Given Instructions:
+	Cool them down
+	Make the first and last bits one
+	
+	Given Code:
+	MV $IN $A
+	AND $A [Mutable]
+	MV $A $OUT
+	
+	Result
+	Turn on Fan	
+	
+	
+Node 12; Bitwise XOR; Copy Machine:
+	
+	1 Static Output Register: $OUT = 0100b
+	1 Static Input Register: $IN = 1011b
+	2 Dynamic Registers: A, B
+	
+	TASK: Flip all the bits, XOR 1111b
+	NOTES: Make only the mask on line 2 mutable
+	Given Instructions:
+	Make some copies
+	Flip all the bits
+	
+	Given Code:
+	MV $IN $A
+	XOR $A [Mutable]
+	MV $A $OUT
+	
+	Result
+	Copy machine on	
+	
+	
+Node 13; Bitwise XOR; Door:
+	
+	2 Static Output Register: $OUT1 = 0110b, $OUT2 = 1110b
+	2 Static Input Register: $IN1 = 1011b, $IN2 = 1100b
+	2 Dynamic Registers: A, B
+	
+	TASK: Match the outputs
+	NOTES: Make only the masks on line 3 and 4 mutable
+	Given Instructions:
+	Make some copies
+	Match the outputs	
+	
+	Given Code:
+	MV $IN1 $A
+	MV $IN2 $B
+	NAND $A [Mutable]
+	NOR $B [Mutable]
+	MV $A $OUT1
+	MV $B $OUT2
+	
+	Result
+	Open Door		
+	
+	
+Node 14; Actual Puzzle; Radio:
+	
+	1 Static Output Register: $OUT = 0110b
+    2 Static Input Register: $IN1 = 1101b, $IN2 = 1000b
+	2 Dynamic Registers: A, B
+	
+	TASK: Have user XOR inputs for output
+	NOTES: Make only the mask on line 3 mutable
+		   After the given numbers run, repeat with random to make sure code works as intened
+		   Make clear if the user fails that the solution was correct, but not general
+	Given Instructions:
+	Play my Jam
+	Find the pattern
+	0010b,1010b		1000b
+	1001b,0110b		1111b
+	1111b,1010b		0101b
+	
+	Given Code:
+	MV $IN1 $A
+	MV $IN2 $B
+	XOR [Mutable]
+	MV $A $OUT
+	
+	Result
+	Play music
+		
+		
+Node 15; Show Jump; Thing:
+	
+	1 Static Output Register: $OUT = 5
+    2 Static Input Register: $IN = 5
+	2 Dynamic Registers: A, B
+	
+	TASK: Get user to add a Jump to provided label
+	NOTES: 
+	Given Instructions:
+	About thing
+	Add a Jump
+	
+	Given Code:
+	MV $IN $A 
+	[Mutable line here]
+	SUB 5 $A
+	JUMP_HERE:
+	MV $A $OUT
+	
+	Result:
+	Thing does its thing
+	
+	
+Node 16; Show Conditional Jump; Thing:
+	
+	1 Static Output Register: $OUT = 10
+    2 Static Input Register: $IN = 1
+	2 Dynamic Registers: A, B
+	
+	TASK: Get user to change JMPF 
+	NOTES: 
+	Given Instructions:
+	About thing
+	Change the code to exit at the right time
+	
+	Given Code:
+	MV $IN $A 
+	LOOP:
+	JMPF $A < 5 EXIT
+	ADD 1 $A
+	JMP LOOP
+	EXIT:
+	MV $A $OUT
+	
+	Result:
+	Thing does its thing
+	
+	
+Node 17; Puzzle; Thing:
+	
+	1 Static Output Register: $OUT = 11
+    3 Static Input Register: $IN1 = 1, $IN2 = 2, $IN3 = 5
+	3 Dynamic Registers: A, B, C
+	
+	TASK: Get user to edit jump conditions to matched examples
+	NOTES: 
+	Given Instructions:
+	About thing
+	Find the pattern
+	2,3,4		14
+	1,2,5		11
+	3,3,2		9
+	
+	Given Code:
+	MV $IN1 $A 
+	MV $IN2 $B
+	MV $IN3 $C 
+	LOOP:
+	JMPF [Mutable] EXIT
+	[Mutable lines]
+	JMP LOOP
+	EXIT:
+	MV $A $OUT
+	
+	Result:
+	Thing does its thing	
+	
+	
+Node 18; Prime Number; Thing:
+	
+	1 Static Output Register: $OUT = 29
+    1 Static Input Register: $IN = 10 
+	2 Dynamic Registers: A, B, C
+	
+	TASK: User creates prime number generator, outputs last one generator based on input
+	NOTES: 
+	Given Instructions:
+	About thing
+	Using the input, calculate that many prime numbers and output the last one
+	
+	Given Code:
+	[All lines mutable]
+	
+	Result:
+	Thing does its thing		
+	
+	
+Node 19; Fibonacci; Thing:
+	
+	1 Static Output Register: $OUT = 21
+    1 Static Input Register: $IN = 8
+	4 Dynamic Registers: A, B, C, D
+	
+	TASK: User creates Fibonacci generator, outputs last one generator based on input
+	NOTES: 
+	Given Instructions:
+	About thing
+	Using the input, calculate that many Fibonacci numbers and output the last one 
+	
+	Given Code:
+	[All lines mutable]
+	
+	Result:
+	Thing does its thing	
+	
+
