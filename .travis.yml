@@ -1,44 +1,28 @@
 language: node_js
-
 node_js:
-  - "node"
-
+- node
 services:
-  - docker
-
-#sudo: false
-#before_install:
-#  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-#  - export PATH=$HOME/.yarn/bin:$PATH
-#cache:
-#  yarn: true
-
-cache:
-  yarn
-
-env:
-  global:
-    # Do not prompt for user input when using any SDK methods.
-    - CLOUDSDK_CORE_DISABLE_PROMPTS=1 
-
+- docker
+cache: yarn
 install:
-  - yarn
-
+- yarn
 stages:
-  - name: lint
-  - name: test
-  - name: push to dockerhub
-    if: branch = master
-  - name: deploy
-    if: branch = master
-
+- name: lint
+- name: test
+- name: push to dockerhub
+  if: branch = master
+- name: deploy
+  if: branch = master
 jobs:
   include:
-    - stage: lint
-      script: yarn lint
-    - stage: test 
-      script: yarn test
-    - stage: push to dockerhub
-      script: ./push_dockerhub.sh
-    - stage: deploy
-      script: ./deploy
+  - stage: lint
+    script: yarn lint
+  - stage: test
+    script: yarn test
+  - stage: push to dockerhub
+    script: "./push_dockerhub.sh"
+  - stage: deploy
+    script: "./deploy"
+before_install:
+- openssl aes-256-cbc -K $encrypted_a61b52fb7c59_key -iv $encrypted_a61b52fb7c59_iv
+  -in deploy_key.enc -out deploy_key -d
