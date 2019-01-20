@@ -11,7 +11,7 @@ stages:
 - name: test
 - name: push to dockerhub
   if: branch = master
-- name: deploy
+- name: deploy to gcp
   if: branch = master
 jobs:
   include:
@@ -21,7 +21,7 @@ jobs:
     script: yarn test
   - stage: push to dockerhub
     script: "./push_dockerhub.sh"
-  - stage: deploy
+  - stage: deploy to gcp
     script: "./deploy"
 before_install:
 - openssl aes-256-cbc -K $encrypted_a61b52fb7c59_key -iv $encrypted_a61b52fb7c59_iv

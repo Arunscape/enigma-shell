@@ -1,8 +1,8 @@
 REPO_NAME=enigma-shell
 
-docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PSW
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 # build the docker image and push to an image repository
 docker build -t $REPO_NAME .
-docker tag $REPO_NAME $DOCKER_HUB_USER/$REPO_NAME
-docker push $DOCKER_HUB_USER/$REPO_NAME
+docker tag $REPO_NAME $DOCKER_USERNAME/$REPO_NAME
+docker push $DOCKER_USERNAME/$REPO_NAME
