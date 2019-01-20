@@ -1,0 +1,9 @@
+# Doing some hardcore math
+MV 2 $A
+ADD 2 $A
+JMPF $A == 4 CHECK # make sure it is right
+CHECK:
+SUB 1 $A
+JMPF $A == 3 QUICKMAFFS
+QUICKMAFFS: MV $A $OUT
+#we did it!
