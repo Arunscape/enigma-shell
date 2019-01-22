@@ -389,7 +389,7 @@ def exec_cmp(cmpr, v1, v2):
     return result
 
 def code_parse(file):    
-    inputcode = [x.strip() for x in file]
+    inputcode = [x.strip() for x in file.split("\n")]
 
     print("")
     print("<> EXTRACTING DATA <>")
@@ -427,6 +427,8 @@ def code_parse(file):
     print("")
     print("<> OUTPUT VALUES <>")
     print(registers.get("out"))
-    return registers.get("out")
+    tmp = registers.get("out")
+    registers['out'] = []
+    return tmp
 
 # main()
