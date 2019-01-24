@@ -47,7 +47,10 @@ class App extends Component {
           <Butt
             onClick={() => {
               axios
-                .post("http://35.233.140.84:80/", "MV 1 $A")
+                .post(
+                  "http://35.233.140.84:5000/",
+                  document.getElementById("HELLO")
+                )
                 .then(res => console.log(res))
                 .catch(reeeeeeee => console.log(reeeeeeee));
             }}
