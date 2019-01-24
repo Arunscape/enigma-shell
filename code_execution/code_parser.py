@@ -1,26 +1,6 @@
 registers = {"out": []}
 labels = {}
 
-def main():
-    # filename = ""
-    # filename = input("Enter your code file name here:\n")
-    # if len(filename) == 0:
-    #     filename = "binarytest.eng"
-    # else:
-    #     filename = filename + ".eng"
-    print("Basic Tests: ")
-    print("")
-    code_parse("basictest.eng")
-    print("")
-    print("")
-    print("--------------------------")
-    print("")
-    print("")
-    print("Binary Tests: ")
-    print("")
-    registers["out"] = []
-    code_parse("binarytest.eng")
-
 def extract_data(line, linenum):
     tokens = line.split()
     tokens = [x.strip().lower() for x in tokens]
@@ -412,4 +392,23 @@ def code_parse(filename):
     print("<> OUTPUT VALUES <>")
     print(registers.get("out"))
 
-main()
+if __name__ == "__main__":
+    # filename = ""
+    # filename = input("Enter your code file name here:\n")
+    # if len(filename) == 0:
+    #     filename = "binarytest.eng"
+    # else:
+    #     filename = filename + ".eng"
+    print("Basic Tests: ")
+    print("")
+    code_parse("basictest.eng")
+    print("")
+    print("")
+    print("--------------------------")
+    print("")
+    print("")
+    print("Binary Tests: ")
+    print("")
+    registers = {"out": []}
+    labels = {}
+    code_parse("binarytest.eng")
