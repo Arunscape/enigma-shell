@@ -1,24 +1,34 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Editor/>
+    <!-- <codemirror/> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Editor from "./components/Editor.vue";
+import { codemirror } from "vue-codemirror";
+import "codemirror/lib/codemirror.css";
+
+// you can set default global options and events when use
+Vue.use({
+  VueCodemirror,
+  options: { theme: "base16-dark" },
+  events: ["scroll"]
+});
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
+    Editor,
+    codemirror
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
