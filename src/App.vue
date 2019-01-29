@@ -2,20 +2,24 @@
   <div id="app">
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    <!-- <Documentation/> -->
-    <Editor />
+    <div id="vert-split">
+      <div><Documentation /></div>
+      <div><Editor /></div>
+      <div>1</div>
+      <div>2</div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+//import HelloWorld from "./components/HelloWorld.vue";
 import Editor from "./components/Editor.vue";
 import Documentation from "./components/Documentation.vue";
 
 export default {
   name: "app",
   components: {
-    HelloWorld,
+//    HelloWorld,
     Editor,
     Documentation
   }

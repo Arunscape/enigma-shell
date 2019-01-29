@@ -1,5 +1,5 @@
 <template lang="html">
-  <div is="sui-segment" inverted>
+  <div class="Documentation" is="sui-segment" inverted>
     <sui-accordion exclusive inverted>
       <sui-accordion-title active>
         <sui-icon name="dropdown" />
@@ -45,9 +45,6 @@
 </template>
 
 <script>
-import SuiVue from "semantic-ui-vue";
-import "semantic-ui-css/semantic.min.css";
-
 export default {
   components: {
     // sui-accordion,
@@ -58,3 +55,9 @@ export default {
   name: "AccordionInverted"
 };
 </script>
+
+<style>
+.Documentation {
+  display: flex;
+}
+</style>
