@@ -3,12 +3,14 @@
   <!-- <codemirror v-model="code" :options="cmOptions"></codemirror> -->
 
   <!-- or to manually control the datasynchronization（或者手动控制数据流，需要像这样手动监听changed事件） -->
-  <codemirror ref="myCm"
-              :value="code"
-              :options="cmOptions"
-              @ready="onCmReady"
-              @focus="onCmFocus"
-              @input="onCmCodeChange">
+  <codemirror
+    ref="myCm"
+    :value="code"
+    :options="cmOptions"
+    @ready="onCmReady"
+    @focus="onCmFocus"
+    @input="onCmCodeChange"
+  >
   </codemirror>
 
   <!-- if Nust.js/SSR（如果在 Nuxt.js 环境下，需要外面包裹一层 no-ssr） -->
@@ -85,6 +87,6 @@ export default {
 <style>
 .CodeMirror {
   text-align: left !important;
-  height: 80px !important;
+  height: 50vh !important;
 }
 </style>
